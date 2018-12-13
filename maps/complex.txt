@@ -7,6 +7,11 @@ define 5 room 5
 define 6 room 6
 define 7 room 7
 define 8 room 8
+define 5_height -1
+define 2_height -2
+define 4_height -2
+define 3_height -3
+define 7_height 0
 define o monster monster_demon_imp
 define c monster monster_demon_hellknight
 define h monster monster_demon_hellknight

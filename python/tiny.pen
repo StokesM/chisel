@@ -7,7 +7,9 @@ ROOM 1
      18 1  1 1
      1 1  1 9
    DOOR 18 6 18 4 STATUS OPEN LEADS TO 2
-   MONSTER monster_demon_imp AT 12 7
+   AMMO item_medkit AMOUNT 1 AT 4 3
+   AMMO item_medkit AMOUNT 1 AT 5 3
+   AMMO item_medkit AMOUNT 1 AT 6 3
    LIGHT AT 5 8 ON MID
    LIGHT AT 9 8 ON MID
    LIGHT AT 13 8 ON MID
@@ -27,14 +29,15 @@ END
 
 ROOM 2
    HEIGHT
-    -1
+    0
    WALL
      18 9  34 9
      34 9  34 1
      34 1  18 1
      18 1  18 9
    DOOR 18 4 18 6 STATUS OPEN LEADS TO 1
-   MONSTER monster_demon_hellknight AT 30 3
+   MONSTER python_doommarine_mp AT 28 6
+   AMMO ammo_grenade_small AMOUNT 16 AT 26 3
    LIGHT AT 22 8 ON MID
    LIGHT AT 26 8 ON MID
    LIGHT AT 30 8 ON MID

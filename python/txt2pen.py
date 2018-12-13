@@ -1138,7 +1138,10 @@ def findEntities (g, room, p):
 def getHeight(r):
     global rooms, defines
     heightKey = r + "_height"
-    rooms[r].height = defines[heightKey]
+    if defines.has_key(heightKey):
+        rooms[r].height = defines[heightKey]
+    else:
+        rooms[r].height = '0\n'
 
 
 def generatePen (mapGrid, start, i, o):
