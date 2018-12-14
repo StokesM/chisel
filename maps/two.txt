@@ -3,20 +3,17 @@ define 1 room 1
 define 2 room 2
 
 define s worldspawn
-define p monster python_doommarine_mp
 
 define i light
-define f light type floor
-
-define a ammo item_medkit 1
-define g ammo ammo_grenade_small 16
+define a ammo ammo_grenade 16
+define p monster python_doommarine_mp
 
 ##################################
 # 1              # 2             #
 #                #               #
-# s              .         p     #
+# s              .           p   #
 #                .               #
 #                .               #
-#  aaa           #       g       #
+#                #               #
 #                #               #
 ##################################
