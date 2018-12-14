@@ -2,17 +2,16 @@
 define 1 room 1
 define 2 room 2
 define s worldspawn
-define o monster monster_demon_imp
-define n monster monster_demon_hellknight
 define i light
 define a ammo ammo_grenade 16
+define p monster python_doommarine_mp
 
 ##################################
 # 1          i   # 2        i    #
-#          o     #               #
-# s              .               #
+#                #               #
+# s              .           p   #
 #                .               #
 #                .               #
-#                #       g   n   #
+#                #               #
 #       i        #    i          #
 ##################################
