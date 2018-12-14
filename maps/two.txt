@@ -1,17 +1,19 @@
 
 define 1 room 1
 define 2 room 2
+
 define s worldspawn
+
 define i light
 define a ammo ammo_grenade 16
 define p monster python_doommarine_mp
 
 ##################################
-# 1          i   # 2        i    #
+# 1              # 2             #
 #                #               #
 # s              .           p   #
 #                .               #
 #                .               #
 #                #               #
-#       i        #    i          #
+#                #               #
 ##################################

@@ -1059,6 +1059,20 @@ def soundDesc ():
         curRoom.addSound (s, soundPos)
 
 
+# Matthew Stokes
+
+def heightDesc():
+    global curRoom
+    expect('HEIGHT')
+    if integer():
+        curRoom.floorLevel = float(curInteger)
+        return True
+    else:
+        errorLine('expecting an integer after the HEIGHT keyword')
+        return False
+
+
+
 #
 #  roomDesc := "ROOM" integer { doorDesc | wallDesc | treasureDesc | ammoDesc | lightDesc | insideDesc | weaponDesc | monsterDesc | spawnDesc } =:
 #
@@ -1072,11 +1086,13 @@ def roomDesc ():
             curRoom = newRoom (curRoomNo)
             if verbose:
                 print "roomDesc", curRoomNo
-            while expecting (['DOOR', 'WALL', 'TREASURE', 'AMMO', 'WEAPON', 'LIGHT', 'INSIDE', 'MONSTER', 'SPAWN', 'DEFAULT', 'SOUND']):
+            while expecting (['DOOR', 'WALL', 'HEIGHT', 'TREASURE', 'AMMO', 'WEAPON', 'LIGHT', 'INSIDE', 'MONSTER', 'SPAWN', 'DEFAULT', 'SOUND']):
                 if expecting (['DOOR']):
                     doorDesc ()
                 elif expecting (['WALL']):
                     wallDesc ()
+                elif expecting(['HEIGHT']):
+                    heightDesc()
                 elif expecting (['TREASURE']):
                     treasureDesc ()
                 elif expecting (['AMMO']):
@@ -2704,9 +2720,10 @@ def assignFloorLevel (f):
 
 def generateMap (o):
     if genSteps:
-        calcFloorLevel ()
-    else:
-        assignFloorLevel (0)
+       calcFloorLevel ()
+    # Commented out to test height defs in file.
+    #else:
+        #assignFloorLevel (0)
     o.write ("// automatically created from: " + inputFile + "\n")
     o       = generateVersion (o)
     o, e, b = generateEntities (o)

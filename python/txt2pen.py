@@ -93,6 +93,7 @@ class roomInfo:
         self.inside = None
         self.defaultColour = {}
         self.sounds = []
+        self.height = '0'
 
 
 #
@@ -461,8 +462,83 @@ def checkLight (p, l, lightCount):
 
 
 def introduceLights (topleft, p, mapGrid, walls, doors):
-    # your code goes here
-    return [] # and replaces this line
+    global debuging
+    s = p
+    a = addVec (p, [-1, -1])
+    d = 1  # 0 up, 1 right, 2 down, 3 left
+    leftVec = [[-1, 0], [0, -1], [1, 0], [0, 1]]
+    forwardVec = [[0, -1], [1, 0], [0, 1], [-1, 0]]
+    if debugging:
+        print "wall corner", p
+    lightCount = 0
+    lights = []
+    doorStartPoint = None
+    doorEndPoint = None
+    needToAvoidDoor = False
+    while True:
+        if debugging:
+            print "point currently at", p, d
+        if (doorStartPoint == None) and lookingLeft (p, leftVec[d], mapGrid, '. '):
+            if debugging:
+                print "seen first point", p
+            # first point on the wall is a door
+            doorStartPoint = addVec (p, leftVec[d])
+            doorEndPoint = doorStartPoint
+            needToAvoidDoor = True
+        if lookingLeft (addVec (p, forwardVec[d]), leftVec[d], mapGrid, '. '):
+            if debugging:
+                print "seen a door point", p,
+            if doorStartPoint == None:
+                doorStartPoint = addVec (addVec (p, forwardVec[d]), leftVec[d])
+            doorEndPoint = addVec (addVec (p, forwardVec[d]), leftVec[d])
+            needToAvoidDoor = True
+        else:
+            # end of door?
+            if doorEndPoint != None:
+                doorStartPoint = None
+                doorEndPoint = None
+                needToAvoidDoor = True
+        if lookingLeft (addVec (p, forwardVec[d]), leftVec[d], mapGrid, 'x '):
+            # carry on
+            if needToAvoidDoor:
+                li = light ()
+                li.settype ('FLOOR')
+                lights += [p + [li]]
+            else:
+                lights, lightCount = checkLight (p, lights, lightCount)
+            needToAvoidDoor = False
+            p = addVec (p, forwardVec[d])
+        elif lookingLeft (addVec (p, forwardVec[d]), leftVec[d], mapGrid, 'x.'):
+            if debugging:
+                print "wall corner (x.)", p
+            doorStartPoint = None
+            doorEndPoint = None
+            # turn right
+            d = (d + 1) % 4
+            if s == p:
+                # back to the start
+                return lights
+        elif lookingLeft (addVec (p, forwardVec[d]), leftVec[d], mapGrid, 'xx'):
+            if debugging:
+                print "wall corner (xx)", p
+            doorStartPoint = None
+            doorEndPoint = None
+            # turn right
+            d = (d + 1) % 4
+            if s == p:
+                # back to the start
+                return lights
+        elif lookingLeft (addVec (p, forwardVec[d]), leftVec[d], mapGrid, '  '):
+            if debugging:
+                print "wall corner (  )", p,
+            # turn left
+            p = addVec (p, forwardVec[d])
+            d = (d + 3) % 4
+            if s == p:
+                # back to the start
+                return lights
+        else:
+            printf ("something went wrong here\n")
 
 def printCoord (c, o):
     global maxy
@@ -548,9 +624,20 @@ def printDefaults (r, o):
         o.write ("%d %d %d\n" % (c[0], c[1], c[2]))
 
 
+# Matthew Stokes - print the height defined for the room.
+
+def printHeight (r, o):
+    global rooms
+    o.write(" ")
+    o.write(rooms[r].height)
+
+
 def printRoom (r, o):
     o.write ("ROOM " + str (r) + "\n")
     printDefaults (r, o)
+    o.write("   HEIGHT\n")
+    o.write("   ")
+    printHeight(r, o)
     o.write ("   WALL\n")
     for p in rooms[r].walls:
         o.write ("   ")
@@ -1047,6 +1134,16 @@ def findEntities (g, room, p):
 #                the map grid commences.  o is the outputfile.
 #
 
+# Matthew Stokes - Gets the height of the passed room.
+def getHeight(r):
+    global rooms, defines
+    heightKey = r + "_height"
+    if defines.has_key(heightKey):
+        rooms[r].height = defines[heightKey]
+    else:
+        rooms[r].height = '0\n'
+
+
 def generatePen (mapGrid, start, i, o):
     global maxx, maxy
     listOfRooms, pos = getListOfRooms (mapGrid, start, i)
@@ -1077,6 +1174,8 @@ def generatePen (mapGrid, start, i, o):
             vprintf ("[%s]", r)
             findEntities (mapGrid, r, p)
         vprintf ("\n")
+        for r in listOfRooms:
+            getHeight(r)
         for r in listOfRooms:
             o = printRoom (r, o)
         o.write ("END.\n")
